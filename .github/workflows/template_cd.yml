@@ -6,7 +6,7 @@ on:
       runs-on:
         description: Platform to execute on
         type: string
-        default: ubuntu-latest
+        default: windows-latest
       env:
         description: Environment deploy to
         type: string
@@ -37,46 +37,7 @@ jobs:
     - name: Download Artifacts
       uses: actions/download-artifact@v3
       with:
-        name: artifacts
-    - name: setup python 3.8
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.8"
-        architecture: "x64"       
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -e .     
-        pip install databricks-cli
-    - name: Upload libs to Databricks
-      run: |
-        echo "Uploading libs at ./libs to workspace dbfs:/lib-dist ..."
-        databricks fs mkdirs dbfs:/lib-dist
-        databricks fs cp "./libs" dbfs:/lib-dist --recursive --overwrite
-      env:
-        DATABRICKS_HOST: ${{ steps.kvSecret.outputs.DATABRICKSDOMAIN }}
-        DATABRICKS_TOKEN: ${{ steps.kvSecret.outputs.DATABRICKSTOKEN }}
-    - name: Install libs in Databricks
-      run: |
-        echo "Installing libs dbfs:/lib-dist ..."
-        for file in `databricks fs ls dbfs:/lib-dist --absolute`
-        do
-            extension="${file##*.}"
-            if [ $extension = "whl" ]
-            then
-                echo "Installing libs $file ..."
-                databricks libraries install --cluster-id $CLUSTER --whl $file
-            fi
-        done
-      env:
-        DATABRICKS_HOST: ${{ steps.kvSecret.outputs.DATABRICKSDOMAIN }}
-        DATABRICKS_TOKEN: ${{ steps.kvSecret.outputs.DATABRICKSTOKEN }}
-        CLUSTER: ${{ steps.kvSecret.outputs.DATABRICKSCLUSTERID }}
-    - name: Deploy notebooks
-      run: |
-        echo "Uploading notebooks at ./notebook_jobs to workspace ${{ inputs.DATABRICKS_NOTEBOOK_PATH }} ..."
-        databricks workspace import_dir --overwrite "./notebook_jobs" "${{ inputs.DATABRICKS_NOTEBOOK_PATH }}"
-      env:
-        DATABRICKS_HOST: ${{ steps.kvSecret.outputs.DATABRICKSDOMAIN }}
-        DATABRICKS_TOKEN: ${{ steps.kvSecret.outputs.DATABRICKSTOKEN }}
+        name: FunctionZip
+        path: ./artifacts
+    - name: Run a one-line script
+      run: ls -l ./artifacts
