@@ -14,6 +14,8 @@ on:
       
 env:
   BUILD_CONFIGURATION: Release
+  DOTNET_VERSION: '6.x.x' # The .NET SDK version to use
+  REPO: "."
 
 jobs:
   build:
@@ -21,22 +23,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{inputs.SOLUTION_FILE_PATH}}
-    - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{inputs.SOLUTION_FILE_PATH}}
-    - uses: actions/upload-artifact@v3
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        name: artifacts
-        path: . # or path/to/artifact
-    - name: Publish Artifacts
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+    - name: Install dependencies
+      run: dotnet restore ${{ env.REPO }}
+      
+    - name: Build
+      run: dotnet build ${{ env.REPO }} --configuration Release --no-restore
+            
+    - name: Publish
+      run: dotnet publish ${{ env.REPO }}
+    
+    - name: Display structure of downloaded files
+      run: | 
+        mkdir ~/artifact 
+        Compress-Archive -Path D:/a/dotnetapp/dotnetapp/function-app/adb-to-purview/src/bin/Debug/net6.0/publish/* -DestinationPath ~/artifact/FunctionZip.zip
+      
+    - name: Upload Function Zip Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: artifacts
-        path: .
+        name: FunctionZip
+        path: ~/artifact/FunctionZip.zip
