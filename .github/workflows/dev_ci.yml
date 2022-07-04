@@ -1,0 +1,19 @@
+name: dev ci
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/template_ci.yml
+    with:
+      runs-on: windows-latest
+  deploy:
+    uses: ./.github/workflows/template_cd.yml
+    with:
+      runs-on: windows-latest
+      env: DEV
+      DATABRICKS_NOTEBOOK_PATH: /Shared/notebook-tests/dbxbuild_${{github.run_number}}/
+      kvname: kvabdev
+    secrets: inherit
+    needs: build

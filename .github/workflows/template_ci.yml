@@ -1,0 +1,42 @@
+name: template ci
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: Platform to execute on
+        type: string
+        default: ubuntu-latest
+      SOLUTION_FILE_PATH:
+        description: solution file path
+        type: string
+        default: .
+      
+env:
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  build:
+    runs-on: ${{ inputs.runs-on }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{inputs.SOLUTION_FILE_PATH}}
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{inputs.SOLUTION_FILE_PATH}}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: . # or path/to/artifact
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: .
