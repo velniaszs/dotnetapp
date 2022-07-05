@@ -11,11 +11,16 @@ on:
         description: solution file path
         type: string
         default: .
+      function-name:
+        description: function name
+        type: string
+        default: FunctionApp1
       
 env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: '6.x.x' # The .NET SDK version to use
   REPO: "."
+  FUNCTION_PATH: "./${{ inputs.function-name }}/"
 
 jobs:
   build:
@@ -29,20 +34,18 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
       
     - name: Install dependencies
-      run: dotnet restore ${{ env.REPO }}
+      run: dotnet restore ${{ env.FUNCTION_PATH }}
       
     - name: Build
-      run: dotnet build ${{ env.REPO }} --configuration Release --no-restore
+      run: dotnet build ${{ env.FUNCTION_PATH }} --configuration Release --no-restore
             
     - name: Publish
-      run: dotnet publish ${{ env.REPO }}
+      run: dotnet publish ${{ env.FUNCTION_PATH }}
     
     - name: Display structure of downloaded files
       run: | 
         mkdir ~/artifact
-        Compress-Archive -Path D:/a/dotnetapp/dotnetapp/FunctionApp1/bin/Debug/net6.0/publish/* -DestinationPath ~/artifact/FunctionApp1.zip
-        Compress-Archive -Path D:/a/dotnetapp/dotnetapp/FunctionApp2/bin/Debug/net6.0/publish/* -DestinationPath ~/artifact/FunctionApp2.zip
-
+        Compress-Archive -Path D:/a/dotnetapp/dotnetapp/${{ inputs.function-name }}/bin/Debug/net6.0/publish/* -DestinationPath ~/artifact/FunctionApp.zip
       
     - name: Upload Function Zip Build Artifact
       uses: actions/upload-artifact@v3
