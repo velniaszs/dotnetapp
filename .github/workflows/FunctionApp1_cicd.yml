@@ -64,7 +64,7 @@ jobs:
       env: PROD
       kvname: kvabdev
       function-name: FunctionApp1
-      secretFuncAppName: ${{ getKeyVaultSecrets.steps.kvSecret.outputs.FunctionApp1FuncAppName }}
-      secretFuncAppPubProf: ${{ getKeyVaultSecrets.steps.kvSecret.outputs.FunctionApp1IntPublishProfile }}
+      secretFuncAppName: ${{ kvSecret.outputs.FunctionApp1FuncAppName }}
+      secretFuncAppPubProf: ${{ kvSecret.outputs.FunctionApp1IntPublishProfile }}
     secrets: inherit
     needs: getKeyVaultSecrets
