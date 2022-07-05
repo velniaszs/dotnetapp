@@ -22,7 +22,7 @@ jobs:
       function-name: FunctionApp1
   deploydev:
     if: (github.ref == 'refs/heads/dev' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml
     with:
       runs-on: windows-latest
       env: DEV
@@ -31,7 +31,7 @@ jobs:
     needs: build
   deploytest:
     if: (github.ref == 'refs/heads/test' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml
     with:
       runs-on: windows-latest
       env: TEST
@@ -40,7 +40,7 @@ jobs:
     needs: build
   deployprod:
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml
     with:
       runs-on: windows-latest
       env: PROD
