@@ -3,16 +3,21 @@ name: FunctionApp1 cicd
 on:
   workflow_dispatch:
   push:
+    paths:
+    - FunctionApp1/**
     branches:  
       - 'dev'
       - 'test'
       - 'main'
   pull_request:
     types: [opened, reopened]
+    paths:
+    - FunctionApp1/**
     branches:  
       - 'dev'
       - 'test'
       - 'main'
+      
 
 jobs:
   build:
