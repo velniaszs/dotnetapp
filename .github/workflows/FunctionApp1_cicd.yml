@@ -54,7 +54,6 @@ jobs:
         keyvault: "kvabdev"
         secrets: 'FunctionApp1FuncAppName, FunctionApp1IntPublishProfile'
       id: kvSecret
-    secrets: inherit
     needs: build 
 
   deployprod:
