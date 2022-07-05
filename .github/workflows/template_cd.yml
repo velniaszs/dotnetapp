@@ -20,6 +20,10 @@ on:
         type: string
         default: Function1
 
+env:
+  funcname: ${{ inputs.function-name }}FuncAppName
+  funcpublishprofile: ${{ inputs.function-name }}IntPublishProfile
+
 jobs:
   deploy:
     runs-on: ${{ inputs.runs-on }}
@@ -32,7 +36,7 @@ jobs:
     - uses: Azure/get-keyvault-secrets@v1
       with: 
         keyvault: "${{ inputs.kvname }}"
-        secrets: '${{ inputs.function-name }}FuncAppName, ${{ inputs.function-name }}IntPublishProfile'
+        secrets: '${{ env.funcname }}, ${{ env.funcpublishprofile }}'
       id: kvSecret
     - name: Download Artifacts
       uses: actions/download-artifact@v3
@@ -44,6 +48,6 @@ jobs:
     - name: Azure Functions Action
       uses: Azure/functions-action@v1.4.6
       with:
-        app-name: ${{ steps.kvSecret.outputs.${{ inputs.function-name }}FuncAppName }}
+        app-name: ${{ steps.kvSecret.outputs.Function1FuncAppName }}
         package: ./artifacts/FunctionApp.zip
-        publish-profile: ${{ steps.kvSecret.outputs.${{ inputs.function-name }}IntPublishProfile }}
+        publish-profile: ${{ steps.kvSecret.outputs.Function1IntPublishProfile }}
