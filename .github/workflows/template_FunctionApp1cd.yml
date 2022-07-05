@@ -1,4 +1,4 @@
-name: template cd
+name: template FunctionApp1 cd
 
 on:
   workflow_call:
@@ -15,14 +15,6 @@ on:
         description: keyvault name
         type: string
         default: kvabdev
-      function-name:
-        description: function name
-        type: string
-        default: FunctionApp1
-
-env:
-  funcname: ${{ inputs.function-name }}FuncAppName
-  funcpublishprofile: ${{ inputs.function-name }}IntPublishProfile
 
 jobs:
   deploy:
@@ -36,7 +28,7 @@ jobs:
     - uses: Azure/get-keyvault-secrets@v1
       with: 
         keyvault: "${{ inputs.kvname }}"
-        secrets: '${{ env.funcname }}, ${{ env.funcpublishprofile }}'
+        secrets: 'Function1FuncAppName, Function1IntPublishProfile'
       id: kvSecret
     - name: Download Artifacts
       uses: actions/download-artifact@v3
