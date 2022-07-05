@@ -22,50 +22,28 @@ jobs:
       function-name: FunctionApp1
   deploydev:
     if: (github.ref == 'refs/heads/dev' && github.event_name == 'push')
-    uses: ./.github/workflows/template_cd.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
     with:
       runs-on: windows-latest
       env: DEV
       kvname: kvabdev
-      function-name: FunctionApp1
     secrets: inherit
     needs: build
   deploytest:
     if: (github.ref == 'refs/heads/test' && github.event_name == 'push')
-    uses: ./.github/workflows/template_cd.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
     with:
       runs-on: windows-latest
       env: TEST
       kvname: kvabdev
-      function-name: FunctionApp1
     secrets: inherit
     needs: build
-
-  getKeyVaultSecrets:
-    runs-on: windows-latest
-    environment: PROD
-
-    steps:
-    - uses: Azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - uses: Azure/get-keyvault-secrets@v1
-      with: 
-        keyvault: "kvabdev"
-        secrets: 'FunctionApp1FuncAppName, FunctionApp1IntPublishProfile'
-      id: kvSecret
-    secrets: inherit
-    needs: build 
-
-    deployprod:
+  deployprod:
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push')
-    uses: ./.github/workflows/template_cd.yml
+    uses: ./.github/workflows/template_FunctionApp1cd.yml.yml
     with:
       runs-on: windows-latest
       env: PROD
       kvname: kvabdev
-      function-name: FunctionApp1
-      secretFuncAppName: ${{ steps.kvSecret.outputs.FunctionApp1FuncAppName }}
-      secretFuncAppPubProf: ${{ steps.kvSecret.outputs.FunctionApp1IntPublishProfile }}
     secrets: inherit
-    needs: getKeyVaultSecrets
+    needs: build
