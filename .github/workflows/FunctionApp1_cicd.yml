@@ -57,7 +57,7 @@ jobs:
     secrets: inherit
     needs: build 
 
-    deployprod:
+  deployprod:
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push')
     uses: ./.github/workflows/template_cd.yml
     with:
