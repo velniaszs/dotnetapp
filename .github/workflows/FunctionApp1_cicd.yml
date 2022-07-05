@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-    - - FunctionApp1/**
+    - FunctionApp1/**
     branches:  
       - 'dev'
       - 'test'
