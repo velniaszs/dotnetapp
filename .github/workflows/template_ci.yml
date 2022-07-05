@@ -19,7 +19,8 @@ on:
 env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: '6.x.x' # The .NET SDK version to use
-  REPO: "./${{ inputs.function-name }}"
+  REPO: "."
+  FUNCTION_PATH: "./${{ inputs.function-name }}"
 
 jobs:
   build:
@@ -36,10 +37,10 @@ jobs:
       run: dotnet restore ${{ env.REPO }}
       
     - name: Build
-      run: dotnet build ${{ env.REPO }} --configuration Release --no-restore
+      run: dotnet build ${{ env.FUNCTION_PATH }} --configuration Release --no-restore
             
     - name: Publish
-      run: dotnet publish ${{ env.REPO }}
+      run: dotnet publish ${{ env.FUNCTION_PATH }}
     
     - name: Display structure of downloaded files
       run: | 
