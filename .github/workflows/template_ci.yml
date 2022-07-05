@@ -14,7 +14,7 @@ on:
       function-name:
         description: function name
         type: string
-        default: Function1
+        default: FunctionApp1
       
 env:
   BUILD_CONFIGURATION: Release
@@ -34,7 +34,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
       
     - name: Install dependencies
-      run: dotnet restore ${{ env.REPO }}
+      run: dotnet restore ${{ env.FUNCTION_PATH }}
       
     - name: Build
       run: dotnet build ${{ env.FUNCTION_PATH }} --configuration Release --no-restore

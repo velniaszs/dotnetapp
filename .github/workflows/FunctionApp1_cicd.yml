@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/template_ci.yml
     with:
       runs-on: windows-latest
-      function-name: Function1
+      function-name: FunctionApp1
   deploydev:
     if: (github.ref == 'refs/heads/dev' && github.event_name == 'push')
     uses: ./.github/workflows/template_cd.yml
@@ -27,6 +27,7 @@ jobs:
       runs-on: windows-latest
       env: DEV
       kvname: kvabdev
+      function-name: FunctionApp1
     secrets: inherit
     needs: build
   deploytest:
@@ -36,6 +37,7 @@ jobs:
       runs-on: windows-latest
       env: TEST
       kvname: kvabdev
+      function-name: FunctionApp1
     secrets: inherit
     needs: build
   deployprod:
@@ -45,5 +47,6 @@ jobs:
       runs-on: windows-latest
       env: PROD
       kvname: kvabdev
+      function-name: FunctionApp1
     secrets: inherit
     needs: build

@@ -18,7 +18,7 @@ on:
       function-name:
         description: function name
         type: string
-        default: Function1
+        default: FunctionApp1
 
 env:
   funcname: ${{ inputs.function-name }}FuncAppName
