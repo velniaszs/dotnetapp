@@ -48,6 +48,6 @@ jobs:
     - name: Azure Functions Action
       uses: Azure/functions-action@v1.4.6
       with:
-        app-name: ${{ steps.kvSecret.outputs.Function1FuncAppName }}
+        app-name: ${{ steps.kvSecret.outputs.FunctionApp1FuncAppName }}
         package: ./artifacts/FunctionApp.zip
-        publish-profile: ${{ steps.kvSecret.outputs.Function1IntPublishProfile }}
+        publish-profile: ${{ steps.kvSecret.outputs.FunctionApp1IntPublishProfile }}
