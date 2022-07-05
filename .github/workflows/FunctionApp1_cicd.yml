@@ -1,14 +1,20 @@
 name: FunctionApp1 cicd
+env:
+  funcname: FunctionApp1
 
 on:
   workflow_dispatch:
   push:
+    paths:
+    - ${{ env.funcname }}./**
     branches:  
       - 'dev'
       - 'test'
       - 'main'
   pull_request:
     types: [opened, reopened]
+    paths:
+    - FunctionApp1/**
     branches:  
       - 'dev'
       - 'test'
