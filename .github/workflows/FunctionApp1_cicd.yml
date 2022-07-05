@@ -1,12 +1,10 @@
 name: FunctionApp1 cicd
-env:
-  funcname: FunctionApp1
 
 on:
   workflow_dispatch:
   push:
     paths:
-    - ${{ env.funcname }}./**
+    - - FunctionApp1/**
     branches:  
       - 'dev'
       - 'test'
@@ -20,15 +18,18 @@ on:
       - 'test'
       - 'main'
 
+env:
+  funcname: FunctionApp1      
+
 jobs:
   build:
     uses: ./.github/workflows/template_ci.yml
     with:
       runs-on: windows-latest
-      function-name: FunctionApp1
+      function-name: ${{ env.funcname }}
   deploydev:
     if: (github.ref == 'refs/heads/dev' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml
+    uses: ./.github/workflows/template_${{ env.funcname }}cd.yml
     with:
       runs-on: windows-latest
       env: DEV
@@ -37,7 +38,7 @@ jobs:
     needs: build
   deploytest:
     if: (github.ref == 'refs/heads/test' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml
+    uses: ./.github/workflows/template_${{ env.funcname }}cd.yml
     with:
       runs-on: windows-latest
       env: TEST
@@ -46,7 +47,7 @@ jobs:
     needs: build
   deployprod:
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push')
-    uses: ./.github/workflows/template_FunctionApp1cd.yml
+    uses: ./.github/workflows/template_${{ env.funcname }}cd.yml
     with:
       runs-on: windows-latest
       env: PROD
