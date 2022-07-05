@@ -20,7 +20,7 @@ env:
   BUILD_CONFIGURATION: Release
   DOTNET_VERSION: '6.x.x' # The .NET SDK version to use
   REPO: "."
-  FUNCTION_PATH: "./${{ inputs.function-name }}"
+  FUNCTION_PATH: "./${{ inputs.function-name }}/"
 
 jobs:
   build:
